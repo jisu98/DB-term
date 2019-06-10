@@ -5,11 +5,15 @@ async function processQuery(query,data) {
     try {
         const conn = await pool.getConnection();
         try {
+            await conn.beginTransaction();
+            await conn.query('SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE');
             const sql = conn.format(query,data);
             const [result] = await conn.query(sql);
+            await conn.commit();
             conn.release();
             return result;
         } catch (e) {
+            await conn.rollback();
             conn.release();
             throw e;
         }
