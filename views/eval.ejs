@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mini-KLUE</title>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+<%# 부트스트랩 navbar %>
+<nav class="navbar navbar-dark" style="background-color: #862633;">
+  <a class="navbar-brand" href="/">mini-KLUE</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/lecture">강의평가<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/lab">연구실평가</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/auth/logout">로그아웃</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<%# 본문 %>
+<!-- Page Content -->
+<div class="lecture-container">
+    <div class="row lecturecard-container" id="lecturecard-container" style="padding-top: 50px">
+      <div class="col-md-4 mb-5">
+      <%#강의평가 %>
+      </div>
+    </div>
+</div>
+
+<%# footer %>
+<div class="footer">
+  <p class="copyright">
+    Copyright (c) Jisu Park. All rights reserved.
+  </p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+<script>
+    const mode = <%-mode%>;
+    const result = <%-result%>[0];
+    const container = document.getElementById("lecturecard-container");
+
+    if(mode === 'rewrite_lec_eval') {
+        container.innerHTML = `
+        <form class="form-horizontal" action='/lecture/update/${result.lec_eid}' method="POST">
+            <fieldset> 
+            
+                <div class="card h-100">
+                    <div class="card-header">
+                        <span class="card-title">${result.course_name}</span>
+                        <span class="card-subtitle"></span>
+                        <span class="card-class">${result.course_id}</span>
+                    </div>
+                    <div class="card-body" style="padding-top:15px">
+                        <div class="form-inline form-group">
+                            <label class="control-label">연도</label>
+                            <div class="control-label">
+                            <input type="text" id="year" name="year" placeholder="" class="input-xlarge" value=${result.year}>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-group">
+                            <label class="control-label">학기</label>
+                            <div class="control-label">
+                            <select id="semester" name="semester" class="input-xlarge" value=${result.semester}>
+                                <option value="spring">1학기</option>
+                                <option value="fall">2학기</option>
+                                <option value="summer">여름 계절학기</option>
+                                <option value="winter">겨울 계절학기</option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-group">
+                            <label class="control-label">분반</label>
+                            <div class="control-label">
+                            <input type="text" id="section" name="section" placeholder="" class="input-xlarge" value=${result.section}>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">강의평가</label>
+                            <div class="control-label">
+                                <textarea id="lecture_evaluation" name="lecture_evaluation" class="input-xlarge" style="width:100%">${result.lec_evaluation}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="control-group">
+                            <div class="control-label">
+                            <button class="btn btn-success mybutton" style="width:auto">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    `} else if(mode === 'write_lec_eval') {
+        container.innerHTML = `
+        <form class="form-horizontal" action='/lecture/eval/${result.course_id}' method="POST">
+            <fieldset> 
+            
+                <div class="card h-100">
+                    <div class="card-header">
+                        <span class="card-title">${result.course_name}</span>
+                        <span class="card-subtitle"></span>
+                        <span class="card-class">${result.course_id}</span>
+                    </div>
+                    <div class="card-body" style="padding-top:15px">
+                        <div class="form-inline form-group">
+                            <label class="control-label">연도</label>
+                            <div class="control-label">
+                            <input type="text" id="year" name="year" placeholder="" class="input-xlarge">
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-group">
+                            <label class="control-label">학기</label>
+                            <div class="control-label">
+                            <select id="semester" name="semester" class="input-xlarge">
+                                <option value="spring">1학기</option>
+                                <option value="fall">2학기</option>
+                                <option value="summer">여름 계절학기</option>
+                                <option value="winter">겨울 계절학기</option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-group">
+                            <label class="control-label">분반</label>
+                            <div class="control-label">
+                            <input type="text" id="section" name="section" placeholder="" class="input-xlarge">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">강의평가</label>
+                            <div class="control-label">
+                                <textarea id="lecture_evalation" name="lecture_evaluation" class="input-xlarge" style="width:100%"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="control-group">
+                            <div class="control-label">
+                            <button class="btn btn-success mybutton" style="width:auto">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    `} else if(mode === 'rewrite_lab_eval') {
+        container.innerHTML = `
+        <form class="form-horizontal" action='/lab/update/${result.lab_eid}' method="POST">
+            <fieldset> 
+                <div class="card h-100">
+                    <div class="card-header">
+                        <span class="card-title">${result.lab_name} 연구실</span>
+                        <span class="card-subtitle"></span>
+                        <span class="card-class"></span>
+                    </div>
+                    <div class="card-body" style="padding-top:15px">
+                        <div class="control-group">
+                            <label class="control-label">연구실평가</label>
+                            <div class="control-label">
+                                <textarea id="lab_evaluation" name="lab_evaluation" class="input-xlarge" style="width:100%">${result.lab_evaluation}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="control-group">
+                            <div class="control-label">
+                            <button class="btn btn-success mybutton" style="width:auto">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    `} else if(mode === 'write_lab_eval') {
+        container.innerHTML = `
+        <form class="form-horizontal" action='/lab/eval/${result.lid}' method="POST">
+            <fieldset> 
+            
+                <div class="card h-100">
+                    <div class="card-header">
+                        <span class="card-title">${result.lab_name} 연구실</span>
+                        <span class="card-subtitle"></span>
+                        <span class="card-class"></span>
+                    </div>
+                    <div class="card-body" style="padding-top:15px">
+                        <div class="control-group">
+                            <label class="control-label">연구실평가</label>
+                            <div class="control-label">
+                                <textarea id="lab_evalation" name="lab_evaluation" class="input-xlarge" style="width:100%"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="control-group">
+                            <div class="control-label">
+                            <button class="btn btn-success mybutton" style="width:auto">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    `}
+
+</script>
+</html>

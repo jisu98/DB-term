@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mini-KLUE</title>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+</head>
+<body>
+<%# 부트스트랩 navbar %>
+<nav class="navbar navbar-dark" style="background-color: #862633;">
+  <a class="navbar-brand" href="/">mini-KLUE</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav" id="navbar">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/lecture">강의평가</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/lab">연구실평가</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<%# 본문 %>
+<div class="main-container">
+  <img id="ppotto" src="https://scontent.ficn1-1.fna.fbcdn.net/v/t1.0-9/21687952_818463081674192_4195910335305617894_n.jpg?_nc_cat=104&_nc_ht=scontent.ficn1-1.fna&oh=5d1dfd2ad5475d4a19290b9d557b0728&oe=5D985FB9"/>
+  <%#
+  <img id="ppotto2" src="https://cf-ea.everytime.kr/attach/626/11788380/everytime-1545059946733.jpg?Expires=1558449003&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi1lYS5ldmVyeXRpbWUua3IvYXR0YWNoLzYyNi8xMTc4ODM4MC9ldmVyeXRpbWUtMTU0NTA1OTk0NjczMy5qcGciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1NTg0NDkwMDN9fX1dfQ__&Signature=NN-DSqqBk-zNf~rfHS9mp1YR2RHrHBKc8UMnqtbbygn6ZuP3hZtUATd17hS6xG9VtfafuSomIFIWqFrz7mwvapa-TdNiZfTE9lv-nngVpzDqbwtuU4EjehQ-EJjg3kPdep9d4n3KrwEMC3onTgQXD5nIIpsajaf04nghr4FPTjKwCk8cmY7Muw861jHbrlUMT4l0sEm2dGaF9Tt8J-uKke-mOVkAIhwMP369h5toWaDZEpYnOdUfm1UmhFojLu~iPvVrMvo2uL4Vyk5~XQHK2H7z4DBM9C~SDMQDKnwX3ZmBkY-sG8yGNwVVh1jH~QJCO4o2DTFADzNcZisX05M60g__&Key-Pair-Id=APKAICU6XZKH23IGASFA"/>
+  %>
+</div>
+
+<%# footer %>
+<div class="footer">
+  <p class="copyright">
+    Copyright (c) Jisu Park. All rights reserved.
+  </p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+<script>
+const authenticated = <%-authenticated%>;
+let parent = document.getElementById('navbar');
+
+if (authenticated) {
+  let a = document.createElement('a');
+  a.className="nav-link"; a.href="/auth/logout"; a.innerHTML="로그아웃";
+  let child = document.createElement('li');
+  child.className="nav-item";
+
+  child.appendChild(a);
+  parent.appendChild(child);
+} else {
+  let a = document.createElement('a');
+    a.className="nav-link";
+    a.href="/register";
+    a.innerHTML="회원가입";
+  let child = document.createElement('li');
+    child.className = "nav-item";
+    
+  child.appendChild(a);
+  parent.appendChild(child);
+
+  let b = document.createElement('a');
+    b.className="nav-link";
+    b.href="/login";
+    b.innerHTML="로그인";
+    
+  child.appendChild(b);
+  parent.appendChild(child);
+}
+</script>
+</html>

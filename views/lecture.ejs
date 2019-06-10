@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mini-KLUE</title>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+<%# 부트스트랩 navbar %>
+<nav class="navbar navbar-dark" style="background-color: #862633;">
+  <a class="navbar-brand" href="/">mini-KLUE</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/lecture">강의평가<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/lab">연구실평가</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/auth/logout">로그아웃</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<%# 본문 %>
+<!-- Page Content -->
+<div class="lecture-container">
+
+    <!-- Call to Action Well -->
+    <div class="text-white my-5 py-4 text-center">
+      <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+          <div class="searchbar width-90-percent">
+            <%# 강의평가는 교수님 성함, 학수번호, 강의명 통합 검색 %>
+            <input class="search_input" type="text" name="" placeholder="강의평가 통합검색" id="search">
+            <a href="#" onclick="search_lecture()" class="search_icon"><i class="fas fa-search"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row lecturecard-new-title">
+        <div class="">
+        <h3 id="title">최신 강의평가</h3>
+        </div>
+    </div>
+
+    <div class="row lecturecard-container" id="lecturecard-container">
+      <%#강의평가 result %>
+    </div>
+</div>
+
+<%# footer %>
+<div class="footer">
+  <p class="copyright">
+    Copyright (c) Jisu Park. All rights reserved.
+  </p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+<script>
+  const result = <%-result%>;
+  
+  const title = <%-title%>;
+  document.getElementById("title").innerHTML = title;
+
+  function search_lecture() {
+    const keyword = document.getElementById('search').value;
+    location.href = '/lecture/search/' + keyword;
+  }
+
+  const container = document.getElementById("lecturecard-container");
+  container.innerHTML = "";
+
+  if(title==="최신 강의평가") {
+    result.forEach((e) => { container.innerHTML += 
+      `<div class="col-md-4 mb-5">
+        <div class="card h-100">
+          <div class="card-header">
+            <span class="card-title">${e.course_name}</span>
+            <span class="card-subtitle">${e.teacher_name}</span>
+            <span class="card-class">${e.year}년 ${e.semester}학기</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-text-name">${e.username}</h5>
+            <p class="card-text-timestamp">${e.submission.substring(0, 10)}</p>
+            <p class="card-text">${e.lec_evaluation}</p>
+          </div>
+          <div> 
+            <%# card-footer 삭제%>
+          </div>
+        </div>
+      </div>`
+    });
+  } else if(title==="강의평가 검색 결과") {
+    result.forEach((e) => { container.innerHTML += 
+      `<div class="col-md-4 mb-5">
+        <div class="card h-100">
+
+          <div class="card-header">
+            <span class="card-title">${e.course_name}</span>
+            <span class="card-subtitle">${e.teacher_name}</span>
+            <span class="card-class">${e.year}년 ${e.semester}학기</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-text-name">${e.username}</h5>
+            <p class="card-text-timestamp">${e.submission.substring(0, 10)}</p>
+            <p class="card-text">${e.lec_evaluation}</p>
+          </div>
+          <div> 
+            <div class="card-footer flex">
+              <a class="btn btn-success mybutton width-auto" href="/lecture/update/${e.lec_eid}">수정</a>
+              <a class="btn btn-success mybutton width-auto" href="/lecture/delete/${e.lec_eid}">삭제</a>
+            </div>
+          </div>
+        </div>
+      </div>`
+    });
+  } else if(title === "강의 검색 결과") {
+    result.forEach((e) => { container.innerHTML += 
+      `<div class="col-md-4 mb-5">
+        <div class="card h-100">
+          <div class="card-header">
+            <span class="card-title">${e.course_name}</span>
+            <span class="card-subtitle">${e.teacher_name}</span>
+            <span class="card-class">${e.course_id}</span>
+          </div>
+          <div class="card-body">
+          </div>
+          <div class="flex p-25"> 
+            <a href="/lecture/${e.course_id}" class="btn btn-primary mybutton">강의평가 보기</a>
+            <a href="/lecture/eval/${e.course_id}" class="btn btn-primary mybutton">강의평가 작성하기</a>
+          </div>
+        </div>
+      </div>`
+    });
+  }
+</script>
+</html>
